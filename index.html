@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>Commande de Fruits</title>
     <style>
+        /* ===========================
+           Styles généraux
+        =========================== */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(to bottom, #e6ffe6, #ccffcc);
@@ -31,7 +34,10 @@
             border-bottom: 2px solid #28a745;
             display: inline-block;
             padding-bottom: 5px;
+            transition: color 0.3s; /* effet hover */
         }
+
+        h2:hover { color: #28a745; }
 
         .categorie {
             display: flex;
@@ -47,7 +53,9 @@
             width: 340px;
             border-radius: 20px;
             box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s, opacity 1s;
+            opacity: 0;
+            animation: fadeIn 0.8s forwards;
         }
 
         .produit:hover {
@@ -63,6 +71,10 @@
             0% { transform: scale(1); }
             50% { transform: scale(1.08); }
             100% { transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
         }
 
         .fruit-img {
@@ -156,9 +168,7 @@
             100% { transform: scale(1); }
         }
 
-        .compteur.pulse {
-            animation: pulse 0.3s ease;
-        }
+        .compteur.pulse { animation: pulse 0.3s ease; }
     </style>
 </head>
 <body>
@@ -249,14 +259,11 @@
         let prix = { banane:500, ananas:1000, mangue:800, orange:600, pamplemousse:900 };
 
         function calculerTotal() {
-            let qBanane = parseInt(document.getElementById("banane").value) || 0;
-            let qAnanas = parseInt(document.getElementById("ananas").value) || 0;
-            let qMangue = parseInt(document.getElementById("mangue").value) || 0;
-            let qOrange = parseInt(document.getElementById("orange").value) || 0;
-            let qPamplemousse = parseInt(document.getElementById("pamplemousse").value) || 0;
-
-            let total = (qBanane*prix.banane) + (qAnanas*prix.ananas) + (qMangue*prix.mangue) + (qOrange*prix.orange) + (qPamplemousse*prix.pamplemousse);
-
+            let total = 0;
+            for (let fruit in prix) {
+                let q = parseInt(document.getElementById(fruit).value) || 0;
+                total += q * prix[fruit];
+            }
             document.getElementById("total").innerText = "Total : " + total + " FCFA";
             return total;
         }
@@ -304,25 +311,19 @@
         }));
 
         function commander() {
-            let total = calculerTotal();
-            let banane = document.getElementById("banane").value;
-            let ananas = document.getElementById("ananas").value;
-            let mangue = document.getElementById("mangue").value;
-            let orange = document.getElementById("orange").value;
-            let pamplemousse = document.getElementById("pamplemousse").value;
-
             let message = "Bonjour, je veux commander :%0A";
-            if(banane>0) message += "- Banane: "+banane+" kg%0A";
-            if(ananas>0) message += "- Ananas: "+ananas+"%0A";
-            if(mangue>0) message += "- Mangue: "+mangue+" kg%0A";
-            if(orange>0) message += "- Orange: "+orange+" kg%0A";
-            if(pamplemousse>0) message += "- Pamplemousse: "+pamplemousse+"%0A";
-
-            message += "Total à payer : " + total + " FCFA";
-
-            let numero = "2250152404244"; // ton numéro WhatsApp
+            for (let fruit in prix) {
+                let q = document.getElementById(fruit).value;
+                if (q > 0) message += "- " + capitalize(fruit) + ": " + q + "%0A";
+            }
+            message += "Total à payer : " + calculerTotal() + " FCFA";
+            let numero = "2250152404244"; 
             let url = "https://wa.me/" + numero + "?text=" + message;
             window.open(url, "_blank");
+        }
+
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
         }
     </script>
 </body>
