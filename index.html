@@ -251,7 +251,7 @@
 
         function calculerTotal() {
             let total = 0;
-            for (let fruit in prix) {
+            for(let fruit in prix){
                 let q = parseInt(document.getElementById(fruit).value) || 0;
                 total += q * prix[fruit];
             }
@@ -259,46 +259,57 @@
             return total;
         }
 
-        function pulseCompteur(id) {
+        function pulseCompteur(id){
             let badge = document.getElementById("compteur-" + id);
             badge.classList.remove("pulse");
             void badge.offsetWidth;
             badge.classList.add("pulse");
         }
 
-        function ajouterQuantite(id) {
+        function animateCard(id){
+            let card = document.getElementById(id + "-card");
+            card.classList.remove("animate");
+            void card.offsetWidth;
+            card.classList.add("animate");
+        }
+
+        function ajouterQuantite(id){
             let input = document.getElementById(id);
             input.value = parseInt(input.value || 0) + 1;
             document.getElementById("compteur-" + id).innerText = input.value;
             pulseCompteur(id);
+            animateCard(id);
             calculerTotal();
         }
 
-        function retirerQuantite(id) {
+        function retirerQuantite(id){
             let input = document.getElementById(id);
-            if (parseInt(input.value || 0) > 0) {
+            if(parseInt(input.value || 0) > 0){
                 input.value = parseInt(input.value) - 1;
                 document.getElementById("compteur-" + id).innerText = input.value;
                 pulseCompteur(id);
+                animateCard(id);
                 calculerTotal();
             }
         }
 
         let inputs = document.querySelectorAll('input[type=number]');
-        inputs.forEach(input => input.addEventListener('input', () => {
+        inputs.forEach(input => input.addEventListener('input', ()=>{
             document.getElementById("compteur-" + input.id).innerText = input.value || 0;
             pulseCompteur(input.id);
+            animateCard(input.id);
             calculerTotal();
         }));
 
-        function commander() {
+        function commander(){
+            let total = calculerTotal();
             let message = "Bonjour, je veux commander :%0A";
-            for (let fruit in prix) {
+            for(let fruit in prix){
                 let q = parseInt(document.getElementById(fruit).value) || 0;
-                if (q>0) message += "- " + fruit.charAt(0).toUpperCase() + fruit.slice(1) + ": " + q + " kg%0A";
+                if(q>0) message += "- " + fruit.charAt(0).toUpperCase() + fruit.slice(1) + ": " + q + " kg%0A";
             }
-            message += "Total à payer : " + calculerTotal() + " FCFA";
-            let numero = "2250152404244"; 
+            message += "Total à payer : " + total + " FCFA";
+            let numero = "2250152404244";
             let url = "https://wa.me/" + numero + "?text=" + message;
             window.open(url, "_blank");
         }
