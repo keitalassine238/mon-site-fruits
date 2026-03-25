@@ -73,7 +73,6 @@
             margin-bottom: 10px;
             cursor: pointer;
             transition: transform 0.2s;
-            display: block; /* Important pour éviter disparition */
         }
 
         .fruit-img:hover { transform: scale(1.05); }
@@ -133,7 +132,6 @@
 
         #total { font-size: 1.4em; color: #155724; font-weight: bold; margin: 20px 0; }
 
-        /* Compteur sur image */
         .compteur {
             position: absolute;
             top: 5px;
@@ -150,7 +148,6 @@
 
         .img-container { position: relative; display: inline-block; }
 
-        /* Animation pulse */
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.4); }
@@ -163,90 +160,148 @@
     </style>
 </head>
 <body>
-<h1>🍍 Commande de Fruits</h1>
+    <h1>🍍 Commande de Fruits</h1>
 
-<h2>Fruits Tropicaux</h2>
-<div class="categorie">
-    <!-- Banane -->
-    <div class="produit" id="banane-card">
-        <div class="img-container">
-            <img src="banane.jpg" alt="Banane" class="fruit-img" onclick="ajouterQuantite('banane')">
-            <span class="compteur" id="compteur-banane">0</span>
+    <h2>Fruits Tropicaux</h2>
+    <div class="categorie">
+        <!-- Banane -->
+        <div class="produit" id="banane-card">
+            <div class="img-container">
+                <img src="banane.jpg" alt="Banane" class="fruit-img" onclick="ajouterQuantite('banane')">
+                <span class="compteur" id="compteur-banane">0</span>
+            </div>
+            <h3>Banane</h3>
+            <p>500 FCFA / kg</p>
+            <div class="quantite-container">
+                <button class="btn-quantite" onclick="retirerQuantite('banane')">-</button>
+                <input type="number" id="banane" value="0">
+                <button class="btn-quantite" onclick="ajouterQuantite('banane')">+</button>
+            </div>
         </div>
-        <h3>Banane</h3>
-        <p>500 FCFA / kg</p>
-        <div class="quantite-container">
-            <button class="btn-quantite" onclick="retirerQuantite('banane')">-</button>
-            <input type="number" id="banane" value="0">
-            <button class="btn-quantite" onclick="ajouterQuantite('banane')">+</button>
+
+        <!-- Ananas -->
+        <div class="produit" id="ananas-card">
+            <div class="img-container">
+                <img src="ananas.jpg" alt="Ananas" class="fruit-img" onclick="ajouterQuantite('ananas')">
+                <span class="compteur" id="compteur-ananas">0</span>
+            </div>
+            <h3>Ananas</h3>
+            <p>1000 FCFA / pièce</p>
+            <div class="quantite-container">
+                <button class="btn-quantite" onclick="retirerQuantite('ananas')">-</button>
+                <input type="number" id="ananas" value="0">
+                <button class="btn-quantite" onclick="ajouterQuantite('ananas')">+</button>
+            </div>
+        </div>
+
+        <!-- Mangue -->
+        <div class="produit" id="mangue-card">
+            <div class="img-container">
+                <img src="mangue.jpg" alt="Mangue" class="fruit-img" onclick="ajouterQuantite('mangue')">
+                <span class="compteur" id="compteur-mangue">0</span>
+            </div>
+            <h3>Mangue</h3>
+            <p>800 FCFA / kg</p>
+            <div class="quantite-container">
+                <button class="btn-quantite" onclick="retirerQuantite('mangue')">-</button>
+                <input type="number" id="mangue" value="0">
+                <button class="btn-quantite" onclick="ajouterQuantite('mangue')">+</button>
+            </div>
         </div>
     </div>
-</div>
 
-<p id="total">Total : 0 FCFA</p>
-<button onclick="commander()">Commander sur WhatsApp</button>
+    <h2>Agrumes</h2>
+    <div class="categorie">
+        <!-- Orange -->
+        <div class="produit" id="orange-card">
+            <div class="img-container">
+                <img src="orange.jpg" alt="Orange" class="fruit-img" onclick="ajouterQuantite('orange')">
+                <span class="compteur" id="compteur-orange">0</span>
+            </div>
+            <h3>Orange</h3>
+            <p>600 FCFA / kg</p>
+            <div class="quantite-container">
+                <button class="btn-quantite" onclick="retirerQuantite('orange')">-</button>
+                <input type="number" id="orange" value="0">
+                <button class="btn-quantite" onclick="ajouterQuantite('orange')">+</button>
+            </div>
+        </div>
 
-<script>
-    let prix = { banane:500 };
+        <!-- Pamplemousse -->
+        <div class="produit" id="pamplemousse-card">
+            <div class="img-container">
+                <img src="pamplemousse.jpg" alt="Pamplemousse" class="fruit-img" onclick="ajouterQuantite('pamplemousse')">
+                <span class="compteur" id="compteur-pamplemousse">0</span>
+            </div>
+            <h3>Pamplemousse</h3>
+            <p>900 FCFA / pièce</p>
+            <div class="quantite-container">
+                <button class="btn-quantite" onclick="retirerQuantite('pamplemousse')">-</button>
+                <input type="number" id="pamplemousse" value="0">
+                <button class="btn-quantite" onclick="ajouterQuantite('pamplemousse')">+</button>
+            </div>
+        </div>
+    </div>
 
-    function calculerTotal() {
-        let qBanane = parseInt(document.getElementById("banane").value) || 0;
-        let total = qBanane * prix.banane;
-        document.getElementById("total").innerText = "Total : " + total + " FCFA";
-        return total;
-    }
+    <p id="total">Total : 0 FCFA</p>
+    <button onclick="commander()">Commander sur WhatsApp</button>
 
-    function pulseCompteur(id) {
-        let badge = document.getElementById("compteur-" + id);
-        badge.classList.remove("pulse");
-        void badge.offsetWidth;
-        badge.classList.add("pulse");
-    }
+    <script>
+        let prix = { banane:500, ananas:1000, mangue:800, orange:600, pamplemousse:900 };
 
-    function ajouterQuantite(id) {
-        let input = document.getElementById(id);
-        input.value = parseInt(input.value || 0) + 1;
-        document.getElementById("compteur-" + id).innerText = input.value;
-        pulseCompteur(id);
-        calculerTotal();
-        animateCard(id + "-card");
-    }
+        function calculerTotal() {
+            let total = 0;
+            for (let fruit in prix) {
+                let q = parseInt(document.getElementById(fruit).value) || 0;
+                total += q * prix[fruit];
+            }
+            document.getElementById("total").innerText = "Total : " + total + " FCFA";
+            return total;
+        }
 
-    function retirerQuantite(id) {
-        let input = document.getElementById(id);
-        if (parseInt(input.value || 0) > 0) {
-            input.value = parseInt(input.value) - 1;
+        function pulseCompteur(id) {
+            let badge = document.getElementById("compteur-" + id);
+            badge.classList.remove("pulse");
+            void badge.offsetWidth;
+            badge.classList.add("pulse");
+        }
+
+        function ajouterQuantite(id) {
+            let input = document.getElementById(id);
+            input.value = parseInt(input.value || 0) + 1;
             document.getElementById("compteur-" + id).innerText = input.value;
             pulseCompteur(id);
             calculerTotal();
-            animateCard(id + "-card");
         }
-    }
 
-    function animateCard(cardId) {
-        let card = document.getElementById(cardId);
-        card.classList.remove("animate");
-        void card.offsetWidth;
-        card.classList.add("animate");
-    }
+        function retirerQuantite(id) {
+            let input = document.getElementById(id);
+            if (parseInt(input.value || 0) > 0) {
+                input.value = parseInt(input.value) - 1;
+                document.getElementById("compteur-" + id).innerText = input.value;
+                pulseCompteur(id);
+                calculerTotal();
+            }
+        }
 
-    let inputs = document.querySelectorAll('input[type=number]');
-    inputs.forEach(input => input.addEventListener('input', () => {
-        document.getElementById("compteur-" + input.id).innerText = input.value || 0;
-        pulseCompteur(input.id);
-        calculerTotal();
-        animateCard(input.id + "-card");
-    }));
+        let inputs = document.querySelectorAll('input[type=number]');
+        inputs.forEach(input => input.addEventListener('input', () => {
+            document.getElementById("compteur-" + input.id).innerText = input.value || 0;
+            pulseCompteur(input.id);
+            calculerTotal();
+        }));
 
-    function commander() {
-        let total = calculerTotal();
-        let banane = document.getElementById("banane").value;
-        let message = "Bonjour, je veux commander :%0A";
-        if(banane>0) message += "- Banane: "+banane+" kg%0A";
-        message += "Total à payer : " + total + " FCFA";
-        let numero = "2250152404244"; 
-        window.open("https://wa.me/" + numero + "?text=" + message, "_blank");
-    }
-</script>
+        function commander() {
+            let message = "Bonjour, je veux commander :%0A";
+            for (let fruit in prix) {
+                let q = parseInt(document.getElementById(fruit).value) || 0;
+                if (q>0) message += "- " + fruit.charAt(0).toUpperCase() + fruit.slice(1) + ": " + q + " kg%0A";
+            }
+            message += "Total à payer : " + calculerTotal() + " FCFA";
+            let numero = "2250152404244"; 
+            let url = "https://wa.me/" + numero + "?text=" + message;
+            window.open(url, "_blank");
+        }
+    </script>
 </body>
 </html>
